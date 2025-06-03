@@ -91,7 +91,6 @@ Beberapa tahapan EDA dilakukan untuk memahami pola dalam data. Berikut beberapa 
 ### 1. Distribusi Rating
   ![image](https://github.com/user-attachments/assets/7bd0d65c-ee97-417a-9445-2a218ece9b37)
 
-
 ### 2. Top Buku Paling Banyak Dinilai
 ![image](https://github.com/user-attachments/assets/06497897-77f3-4c57-8c90-82224abcc4f0)
 
@@ -100,11 +99,39 @@ Beberapa tahapan EDA dilakukan untuk memahami pola dalam data. Berikut beberapa 
 
 
 ## Data Preparation
-Pada bagian ini Anda menerapkan dan menyebutkan teknik data preparation yang dilakukan. Teknik yang digunakan pada notebook dan laporan harus berurutan.
+Tahapan data preparation dilakukan untuk memastikan bahwa data yang digunakan dalam proses pemodelan sudah bersih, relevan, dan dalam format yang sesuai. Seluruh teknik yang diterapkan dilakukan secara berurutan dan disesuaikan dengan kebutuhan dua pendekatan sistem rekomendasi: Content-Based Filtering dan Collaborative Filtering.
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan proses data preparation yang dilakukan
-- Menjelaskan alasan mengapa diperlukan tahapan data preparation tersebut.
+### 1. Data Cleaning
+- Menghapus rating dengan nilai nol
+Data dengan nilai rating 0 tidak mencerminkan preferensi pengguna dan hanya berfungsi sebagai implicit feedback, sehingga dihapus agar tidak mengganggu distribusi data dan performa model.
+
+- Memfilter buku berdasarkan data rating
+Dipilih 10.000 buku dengan jumlah rating terbanyak dari dataset rating yang telah dibersihkan. Hal ini dilakukan untuk mengurangi sparsity dan mengatasi keterbatasan sumber daya komputasi.
+
+- Memfilter data user
+Dataset user disesuaikan agar hanya mencakup pengguna yang benar-benar memberikan rating. Langkah ini bertujuan untuk menghilangkan entitas yang tidak relevan.
+
+
+### 2. Data Preprocessing
+- Menggabungkan dataset ratings dengan books
+Dataset rating difilter digabung dengan data buku berdasarkan kolom ISBN untuk memperoleh informasi tambahan yang dibutuhkan oleh model Content-Based Filtering.
+
+- Pemeriksaan data null dan duplikat
+Setelah penggabungan, dilakukan pengecekan terhadap nilai kosong dan data duplikat untuk menjaga kualitas dan konsistensi data.
+
+- Menghapus kolom yang tidak dibutuhkan
+Tiga kolom berupa URL gambar (Image-URL-S, Image-URL-M, Image-URL-L) dihapus karena tidak diperlukan dalam proses pemodelan.
+
+- Membuat dataframe unik berisi informasi buku
+Disusun dataframe yang hanya berisi kombinasi unik dari ISBN, judul, penulis, dan penerbit untuk memastikan data yang digunakan benar-benar valid dan representatif.
+
+- Menggabungkan kolom penulis dan penerbit
+Kolom Book-Author dan Publisher digabungkan sebagai representasi konten untuk proses ekstraksi fitur dalam Content-Based Filtering.
+
+- Encoding ID pengguna dan buku
+ID pengguna dan ID buku diubah ke dalam bentuk representasi numerik menggunakan encoding. Langkah ini diperlukan agar data dapat digunakan dalam proses embedding pada model Collaborative Filtering.
+
+
 
 ## Modeling
 Tahapan ini membahas mengenai model sisten rekomendasi yang Anda buat untuk menyelesaikan permasalahan. Sajikan top-N recommendation sebagai output.

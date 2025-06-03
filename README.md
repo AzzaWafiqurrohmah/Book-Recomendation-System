@@ -134,22 +134,50 @@ ID pengguna dan ID buku diubah ke dalam bentuk representasi numerik menggunakan 
 
 
 ## Modeling
-Tahapan ini membahas mengenai model sisten rekomendasi yang Anda buat untuk menyelesaikan permasalahan. Sajikan top-N recommendation sebagai output.
+Pada proyek ini, dikembangkan dua pendekatan sistem rekomendasi yang berbeda:
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menyajikan dua solusi rekomendasi dengan algoritma yang berbeda.
-- Menjelaskan kelebihan dan kekurangan dari solusi/pendekatan yang dipilih.
+### 1. Content-Based Filtering
+Pendekatan ini merekomendasikan buku berdasarkan kemiripan konten dengan buku yang telah disukai oleh pengguna. Fitur yang digunakan adalah judul buku, penulis, dan penerbit, yang digabung lalu diproses menggunakan TF-IDF vectorizer. Kemiripan antar buku dihitung menggunakan cosine similarity.
+
+- Kelebihan:
+   - Tidak bergantung pada jumlah pengguna atau rating.
+   - Mampu memberikan rekomendasi meskipun buku belum pernah diberi rating (mengurangi cold-start pada item).
+     
+- Kekurangan:
+   - Hanya merekomendasikan buku yang mirip dengan apa yang sudah disukai.
+   - Tidak mempertimbangkan preferensi komunitas atau perilaku pengguna lain.
+
+### 2. Collaborative Filtering (User–Item Matrix Factorization)
+Pendekatan ini memanfaatkan data interaksi pengguna dengan buku berupa rating. Sistem dilatih menggunakan arsitektur embedding neural network (RecommenderNet), yang memetakan pengguna dan buku ke dalam vektor laten, lalu menghitung interaksi antar keduanya.
+
+- Kelebihan:
+   - Mampu menangkap pola kompleks dalam preferensi pengguna.
+   - Mampu merekomendasikan buku yang tidak serupa secara konten, namun disukai oleh pengguna dengan perilaku serupa.
+     
+- Kekurangan:
+   - Rentan terhadap masalah cold-start (jika pengguna atau item baru tidak punya cukup data).
+   - Membutuhkan data interaksi yang cukup banyak dan berkualitas.
+
+### Output Top-N Recommendation
+Sebagai hasil akhir, sistem menghasilkan Top-10 rekomendasi buku untuk setiap pengguna. Rekomendasi ini didasarkan pada skor prediksi tertinggi dari model yang telah dilatih dan tidak termasuk buku yang sudah pernah diberi rating sebelumnya oleh pengguna tersebut.
 
 ## Evaluation
-Pada bagian ini Anda perlu menyebutkan metrik evaluasi yang digunakan. Kemudian, jelaskan hasil proyek berdasarkan metrik evaluasi tersebut.
 
-Ingatlah, metrik evaluasi yang digunakan harus sesuai dengan konteks data, problem statement, dan solusi yang diinginkan.
+### 1. Collaborative Filtering
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan formula metrik dan bagaimana metrik tersebut bekerja.
+![image](https://github.com/user-attachments/assets/ab3ca541-4857-4e7c-9b51-85e5d67f2a9c)
 
-**---Ini adalah bagian akhir laporan---**
 
-_Catatan:_
-- _Anda dapat menambahkan gambar, kode, atau tabel ke dalam laporan jika diperlukan. Temukan caranya pada contoh dokumen markdown di situs editor [Dillinger](https://dillinger.io/), [Github Guides: Mastering markdown](https://guides.github.com/features/mastering-markdown/), atau sumber lain di internet. Semangat!_
-- Jika terdapat penjelasan yang harus menyertakan code snippet, tuliskan dengan sewajarnya. Tidak perlu menuliskan keseluruhan kode project, cukup bagian yang ingin dijelaskan saja.
+Evaluasi model dilakukan menggunakan Mean Absolute Error (MAE) yang mengukur rata-rata selisih absolut antara rating prediksi dan rating aktual.
+Rumus MAE:
+<p align="center">
+  MAE = (1/n) * Σ | yᵢ - ŷᵢ | <br>
+</p>
+Hasil Evaluasi
+Berdasarkan grafik pelatihan, model menunjukkan penurunan MAE yang konsisten pada data pelatihan maupun validasi seiring bertambahnya epoch. Nilai MAE pada data validasi cenderung stabil di sekitar 0.18–0.19, menandakan bahwa model memiliki performa generalisasi yang baik dan tidak mengalami overfitting. Hal ini menunjukkan bahwa model mampu memberikan prediksi rating yang cukup akurat terhadap preferensi pengguna.
+
+### 2. Content-Based Filtering
+Berbeda dengan collaborative filtering yang menggunakan metrik numerik seperti MAE, evaluasi pada pendekatan content-based filtering dilakukan secara kualitatif berdasarkan relevansi hasil rekomendasi. Model content-based ini merekomendasikan buku kepada pengguna berdasarkan kemiripan atribut konten buku, seperti judul, nama penulis, dan penerbit. Evaluasi dilakukan dengan mengamati seberapa relevan dan bervariasi hasil rekomendasi terhadap item tertentu.
+
+Meskipun pendekatan ini tidak mengalami masalah sparsity seperti collaborative filtering, kelemahan utamanya terletak pada kecenderungan sistem merekomendasikan buku yang terlalu mirip (kurang bervariasi). Hal ini disebut serendipity problem. Secara keseluruhan, model content-based ini memberikan hasil yang relevan dan cocok untuk pengguna baru (cold start), namun memiliki keterbatasan dalam mengeksplorasi item di luar preferensi awal pengguna.
+

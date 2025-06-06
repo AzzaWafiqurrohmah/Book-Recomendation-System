@@ -32,7 +32,7 @@ Kombinasi dari dua pendekatan ini diharapkan dapat meningkatkan akurasi dan rele
 
 ## Data Understanding
 ### Dataset Overview
-Proyek ini menggunakan Book-Crossing Dataset yang tersedia secara publik melalui platform Kaggle. Dataset ini berisi informasi mengenai buku, pengguna, dan penilaian (rating) yang diberikan oleh pengguna terhadap buku tersebut.
+Pada proyek ini, dataset yang digunakan adalah Book-Crossing Dataset yang tersedia secara publik melalui platform Kaggle melalui tautan berikut: https://www.kaggle.com/datasets/arashnic/book-recommendation-dataset. Dataset ini berisi informasi mengenai buku, pengguna, dan penilaian (rating) yang diberikan oleh pengguna terhadap buku tersebut.
 
 Dataset terdiri dari tiga file utama:
 1. Books.csv – berisi informasi detail tentang buku.

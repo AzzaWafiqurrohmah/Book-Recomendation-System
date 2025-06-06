@@ -159,7 +159,33 @@ Pendekatan ini memanfaatkan data interaksi pengguna dengan buku berupa rating. S
    - Membutuhkan data interaksi yang cukup banyak dan berkualitas.
 
 ### Output Top-N Recommendation
-Sebagai hasil akhir, sistem menghasilkan Top-10 rekomendasi buku untuk setiap pengguna. Rekomendasi ini didasarkan pada skor prediksi tertinggi dari model yang telah dilatih dan tidak termasuk buku yang sudah pernah diberi rating sebelumnya oleh pengguna tersebut.
+Sebagai hasil akhir, sistem menghasilkan Top-5 rekomendasi buku untuk setiap pengguna. Contoh dari masing masing model seperti dibawah ini: 
+
+#### 1. Content-Based Filtering
+Model ini merekomendasikan buku berdasarkan kemiripan fitur konten, seperti penulis dan penerbit. Sistem akan mencari buku yang memiliki kemiripan dengan buku yang pernah disukai oleh pengguna.
+
+Contoh 5 rekomendasi teratas untuk buku "Shades Of Twilight" dengan penulis Linda Howard dan penerbit Pocket adalah:
+- Son of the Morning, Linda Howard, Pocket
+- Strangers in the Night, Linda Howard, Pocket
+- Open Season, Linda Howard, Pocket
+- Everlasting Love, Linda Howard, Pocket
+- Dying to Please, Linda Howard, Ballantine Books
+
+#### 2. Collaborative Filtering
+Model ini memanfaatkan perilaku pengguna lain yang serupa untuk memberikan rekomendasi. Sistem akan merekomendasikan buku berdasarkan preferensi pengguna lain yang memiliki pola kesukaan serupa.
+
+Contoh Output untuk User ID 34502
+- Buku dengan rating tinggi dari user:
+   - Exclusive – Sandra Brown, Warner Books
+   - An Isolated Incident – Susan R. Sloan, Warner Books
+
+- Top-5 Rekomendasi:
+   - Mere Christianity – C. S. Lewis, Macmillan Pub. Co
+   - The Hobbit – J. R. R. Tolkien, Ballantine Books
+   - The Tomb and Other Tales – H. P. Lovecraft, Del Rey Books
+   - A Swiftly Tilting Planet – Madeleine L'Engle, Farrar, Straus and Giroux
+   - Daughter of the Blood – Anne Bishop, Roc
+
 
 ## Evaluation
 

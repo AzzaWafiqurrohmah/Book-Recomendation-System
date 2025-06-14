@@ -99,38 +99,60 @@ Beberapa tahapan EDA dilakukan untuk memahami pola dalam data. Berikut beberapa 
 
 
 ## Data Preparation
-Tahapan data preparation dilakukan untuk memastikan bahwa data yang digunakan dalam proses pemodelan sudah bersih, relevan, dan dalam format yang sesuai. Seluruh teknik yang diterapkan dilakukan secara berurutan dan disesuaikan dengan kebutuhan dua pendekatan sistem rekomendasi: Content-Based Filtering dan Collaborative Filtering.
+
+Tahapan data preparation dilakukan untuk memastikan bahwa data yang digunakan dalam proses pemodelan sudah bersih, relevan, dan dalam format yang sesuai.  
+Seluruh proses disesuaikan dengan kebutuhan dua pendekatan sistem rekomendasi yang digunakan, yaitu **Content-Based Filtering** dan **Collaborative Filtering**.
 
 ### 1. Data Cleaning
-- Menghapus rating dengan nilai nol
-Data dengan nilai rating 0 tidak mencerminkan preferensi pengguna dan hanya berfungsi sebagai implicit feedback, sehingga dihapus agar tidak mengganggu distribusi data dan performa model.
 
-- Memfilter buku berdasarkan data rating
-Dipilih 10.000 buku dengan jumlah rating terbanyak dari dataset rating yang telah dibersihkan. Hal ini dilakukan untuk mengurangi sparsity dan mengatasi keterbatasan sumber daya komputasi.
+- **Menghapus rating dengan nilai nol**  
+  Rating bernilai 0 tidak mencerminkan preferensi eksplisit dari pengguna dan lebih merepresentasikan implicit feedback.  
+  Untuk menjaga akurasi dan distribusi data, nilai-nilai ini dihapus agar tidak mempengaruhi performa model.
 
-- Memfilter data user
-Dataset user disesuaikan agar hanya mencakup pengguna yang benar-benar memberikan rating. Langkah ini bertujuan untuk menghilangkan entitas yang tidak relevan.
+- **Memfilter buku berdasarkan data rating**  
+  Diambil 10.000 buku dengan jumlah rating terbanyak dari dataset yang telah dibersihkan.  
+  Langkah ini bertujuan mengurangi *sparsity* dan mengoptimalkan proses komputasi.
 
+- **Memfilter data user**  
+  Dataset pengguna disesuaikan hanya mencakup user yang benar-benar memberikan rating.  
+  Hal ini menghindari keberadaan entitas tidak relevan yang dapat mengganggu performa model.
+
+- **Konversi tipe data**  
+  Kolom ISBN dikonversi ke tipe string untuk menjaga konsistensi format.  
+  Kolom Book-Rating dikonversi ke tipe float32 agar efisien dalam perhitungan numerik.
 
 ### 2. Data Preprocessing
-- Menggabungkan dataset ratings dengan books
-Dataset rating difilter digabung dengan data buku berdasarkan kolom ISBN untuk memperoleh informasi tambahan yang dibutuhkan oleh model Content-Based Filtering.
 
-- Pemeriksaan data null dan duplikat
-Setelah penggabungan, dilakukan pengecekan terhadap nilai kosong dan data duplikat untuk menjaga kualitas dan konsistensi data.
+- **Menggabungkan dataset ratings dengan books**  
+  Dataset rating yang telah difilter digabungkan dengan data buku berdasarkan kolom ISBN.  
+  Ini diperlukan untuk menyediakan informasi konten tambahan bagi pendekatan Content-Based Filtering.
 
-- Menghapus kolom yang tidak dibutuhkan
-Tiga kolom berupa URL gambar (Image-URL-S, Image-URL-M, Image-URL-L) dihapus karena tidak diperlukan dalam proses pemodelan.
+- **Pemeriksaan data null dan duplikat**  
+  Setelah penggabungan data, dilakukan pengecekan terhadap nilai kosong dan duplikat untuk memastikan konsistensi dan integritas data.
 
-- Membuat dataframe unik berisi informasi buku
-Disusun dataframe yang hanya berisi kombinasi unik dari ISBN, judul, penulis, dan penerbit untuk memastikan data yang digunakan benar-benar valid dan representatif.
+- **Menghapus kolom yang tidak dibutuhkan**  
+  Kolom seperti Image-URL-S, Image-URL-M, dan Image-URL-L dihapus karena tidak relevan untuk proses pemodelan.
 
-- Menggabungkan kolom penulis dan penerbit
-Kolom Book-Author dan Publisher digabungkan sebagai representasi konten untuk proses ekstraksi fitur dalam Content-Based Filtering.
+- **Membuat dataframe unik berisi informasi buku**  
+  Disusun dataframe dengan kombinasi unik ISBN, judul, penulis, dan penerbit untuk memastikan keunikan dan validitas entitas buku.
 
-- Encoding ID pengguna dan buku
-ID pengguna dan ID buku diubah ke dalam bentuk representasi numerik menggunakan encoding. Langkah ini diperlukan agar data dapat digunakan dalam proses embedding pada model Collaborative Filtering.
+- **Menggabungkan kolom penulis dan penerbit**  
+  Kolom Book-Author dan Publisher digabung menjadi satu kolom teks sebagai representasi konten buku.
 
+- **Ekstraksi fitur dengan TF-IDF Vectorization**  
+  Kolom gabungan penulis dan penerbit diekstrak menggunakan teknik TF-IDF untuk menghasilkan representasi numerik berbasis teks, yang akan digunakan dalam Content-Based Filtering.
+
+- **Encoding ID pengguna dan buku**  
+  ID user dan ID buku dikodekan ke bentuk numerik untuk keperluan embedding dan input ke model Collaborative Filtering.
+
+- **Normalisasi nilai rating**  
+  Nilai Book-Rating dinormalisasi ke rentang antara 0 dan 1. Normalisasi ini penting untuk membantu proses pelatihan model neural network pada pendekatan Collaborative Filtering.
+
+- **Pengacakan (shuffling) data**  
+  Dataset diacak menggunakan `df.sample(frac=1)` untuk menghindari bias urutan sebelum proses training.
+
+- **Split data menjadi training dan validation**  
+  Dataset akhir dibagi menjadi dua bagian: data latih dan data validasi, untuk keperluan evaluasi performa model.
 
 
 ## Modeling

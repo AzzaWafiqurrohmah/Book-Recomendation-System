@@ -225,7 +225,19 @@ Hasil Evaluasi
 Berdasarkan grafik pelatihan, model menunjukkan penurunan MAE yang konsisten pada data pelatihan maupun validasi seiring bertambahnya epoch. Nilai MAE pada data validasi cenderung stabil di sekitar 0.18–0.19, menandakan bahwa model memiliki performa generalisasi yang baik dan tidak mengalami overfitting. Hal ini menunjukkan bahwa model mampu memberikan prediksi rating yang cukup akurat terhadap preferensi pengguna.
 
 ### 2. Content-Based Filtering
-Berbeda dengan collaborative filtering yang menggunakan metrik numerik seperti MAE, evaluasi pada pendekatan content-based filtering dilakukan secara kualitatif berdasarkan relevansi hasil rekomendasi. Model content-based ini merekomendasikan buku kepada pengguna berdasarkan kemiripan atribut konten buku, seperti judul, nama penulis, dan penerbit. Evaluasi dilakukan dengan mengamati seberapa relevan dan bervariasi hasil rekomendasi terhadap item tertentu.
+Berbeda dengan collaborative filtering yang menggunakan metrik numerik seperti MAE, evaluasi pada pendekatan content-based filtering awalnya dilakukan secara kualitatif berdasarkan relevansi hasil rekomendasi. Model content-based ini merekomendasikan buku kepada pengguna berdasarkan kemiripan atribut konten buku, seperti judul, nama penulis, dan penerbit. Evaluasi dilakukan dengan mengamati seberapa relevan dan bervariasi hasil rekomendasi terhadap item tertentu.
 
-Meskipun pendekatan ini tidak mengalami masalah sparsity seperti collaborative filtering, kelemahan utamanya terletak pada kecenderungan sistem merekomendasikan buku yang terlalu mirip (kurang bervariasi). Hal ini disebut serendipity problem. Secara keseluruhan, model content-based ini memberikan hasil yang relevan dan cocok untuk pengguna baru (cold start), namun memiliki keterbatasan dalam mengeksplorasi item di luar preferensi awal pengguna.
+Meskipun pendekatan ini tidak mengalami masalah sparsity seperti collaborative filtering, kelemahan utamanya terletak pada kecenderungan sistem merekomendasikan buku yang terlalu mirip (kurang bervariasi), yang dikenal sebagai serendipity problem. Secara keseluruhan, model content-based ini memberikan hasil yang relevan dan cocok untuk pengguna baru (cold start), namun memiliki keterbatasan dalam mengeksplorasi item di luar preferensi awal pengguna.
+
+Untuk melengkapi evaluasi, dilakukan juga pengukuran kuantitatif menggunakan metrik:
+- Precision@5 (seberapa banyak dari top-5 rekomendasi yang benar-benar relevan)
+- Recall@5 (seberapa banyak dari total buku relevan yang berhasil direkomendasikan)
+
+Evaluasi dilakukan dengan membagi sebagian data sebagai test set, dan mengukur relevansi rekomendasi terhadap data ground truth pengguna (buku-buku yang sebelumnya diberi rating tinggi).
+
+Hasil evaluasi kuantitatif:
+- Precision@5: 0.0118
+- Recall@5: 0.0323
+
+Nilai ini menunjukkan bahwa model content-based filtering masih memiliki keterbatasan dalam menjangkau preferensi pengguna secara akurat, kemungkinan besar karena keterbatasan fitur konten yang digunakan (hanya penulis dan penerbit). Meski demikian, model ini tetap bermanfaat sebagai baseline dan dapat diperkuat dengan penambahan fitur seperti genre, deskripsi, atau sinopsis untuk meningkatkan akurasi rekomendasi.
 
